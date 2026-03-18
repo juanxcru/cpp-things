@@ -1,0 +1,15 @@
+# objects
+LIBO = src/logger.o
+MAINO = src/main.o
+TESTO = tests/test_logger.o 
+
+MAIN = build/logger
+TEST = test/test_logger
+
+CXXFLAGS = -std=c++11 -Wall -Wextra -g -Wno-unused-parameter -Iinclude
+CXX = g++
+
+
+
+
+
