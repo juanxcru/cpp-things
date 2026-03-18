@@ -24,7 +24,7 @@ const char* levelToString(LogLevel level);
 
 // 
 // LoggerConfig — all tunable parameters in one place.
-// ToDo: 
+// ToDo: env
 // 
 struct LoggerConfig {
     std::string  logDir        = "./logs";   // directory for log files
@@ -37,14 +37,9 @@ struct LoggerConfig {
 // 
 // Logger — thread-safe, asynchronous, rotating file logger.
 //
-// Design choices worth knowing for your exam:
 //
-//  1. SINGLETON? No. A singleton Logger couples the whole codebase to one
-//     instance and makes unit testing a nightmare. Instead, pass the Logger
-//     by reference or pointer. This is the Dependency Injection principle.
-//
-//  2. RAII: The constructor starts the worker thread; the destructor stops it
-//     and flushes the queue. This means you can't forget to shut down.
+//  2. RAII: The constructor starts the worker thread. the destructor stops it
+//     and flushes the queue.
 //
 //  3. NON-COPYABLE: Copying a Logger would copy the thread handle and mutex,
 //     which is nonsensical. We explicitly delete copy constructor/assignment.
@@ -53,26 +48,22 @@ class Logger {
 public:
     explicit Logger(LoggerConfig config = LoggerConfig{});
 
-    // Destructor signals shutdown, waits for the worker thread to drain the
-    // queue, and closes the file. Guaranteed clean exit.
+
     ~Logger();
 
-    // Non-copyable, non-movable (thread + mutex semantics don't allow it).
     Logger(const Logger&)            = delete;
     Logger& operator=(const Logger&) = delete;
 
     //  Public logging interface 
-    // These are the only functions callers ever touch.
-    // They push to the queue (fast, O(1)) and return immediately.
     void debug(const std::string& msg);
     void info (const std::string& msg);
     void warn (const std::string& msg);
     void error(const std::string& msg);
 
-    // Generic version — useful when level is determined at runtime.
+    // generic
     void log(LogLevel level, const std::string& msg);
 
-    //  Inspection 
+    //  inspetcion 
     std::size_t queueSize() const;   // snapshot (for monitoring/tests)
     bool        isRunning() const;
 
