@@ -36,8 +36,10 @@ Logger::Logger(LoggerConfig config)
  
 Logger::~Logger() {
 
-    std::lock_guard<std::mutex> lock(mutex_);
-    shutdown_ = true;
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        shutdown_ = true;
+    }
 
     cv_.notify_one();   
     worker_.join();     
@@ -105,7 +107,7 @@ void Logger::workerLoop() {
 
             rotateIfNeeded();
 
-            // Format: 2025-03-15T14:23:01.123 [INFO] 
+            // Format: 2025-03-15T14:23:01.123 [INFO ] 
             std::string line = entry.timestamp
                              + " [" + levelToString(entry.level) + "] "
                              + entry.message + "\n";
