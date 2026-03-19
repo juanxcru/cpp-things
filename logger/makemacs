@@ -8,7 +8,7 @@ TEST = test/test_logger
 
 CXXFLAGS = -std=c++11 -Wall -Wextra -g -Wno-unused-parameter -Iinclude
 CXX = g++
-
+LDFLAGS = -pthread
 
 
 
