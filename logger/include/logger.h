@@ -69,9 +69,6 @@ public:
 
 private:
     //  Internal message type 
-    // We bundle level + message into one struct so the queue holds complete,
-    // self-describing entries. Timestamp is generated at enqueue time, not
-    // at write time — this preserves the order events actually happened.
     struct LogEntry {
         LogLevel    level;
         std::string timestamp;  // ISO 8601 e.g. "2024-01-15T14:23:01.123"
@@ -79,13 +76,13 @@ private:
     };
 
     //  Worker thread 
-    // This is the single background thread that does all file I/O.
+    //worker responsible for file I/O.
     void workerLoop();
 
     //  File rotation 
     void openNewFile();
     void rotateIfNeeded();
-    bool shouldRotate() const;
+    //bool shouldRotate() const;
 
     //  Helpers 
     std::string currentTimestamp() const;
@@ -98,17 +95,11 @@ private:
     std::ofstream          file_;
     std::size_t            bytesWritten_ = 0; // track size for rotation
 
-    //  Concurrency primitives 
-    // mutex_ guards queue_ — it's the "bathroom key" metaphor from earlier.
-    // cv_ is the condition variable: the worker thread sleeps on it when the
-    // queue is empty, and producers wake it up when they push a message.
-    // This is much better than a spin-loop (which would waste a CPU core).
+    
     mutable std::mutex      mutex_;
     std::condition_variable cv_;
     std::queue<LogEntry>    queue_;
     bool                    shutdown_ = false;
 
-    // Thread is declared last — it starts in the constructor body, after all
-    // other members are initialized. Order of declaration = order of init.
     std::thread             worker_;
 };

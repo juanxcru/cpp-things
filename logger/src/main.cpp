@@ -15,8 +15,8 @@
 // 
 void paymentWorker(Logger& logger, int workerId, int numTransactions,
                    std::atomic<int>& completedCount) {
-    std::mt19937 rng(workerId * 42);  // reproducible per-worker randomness
-    std::uniform_int_distribution<int> delayUs(100, 2000);  // μs between txns
+    std::mt19937 rng(workerId * 42); 
+    std::uniform_int_distribution<int> delayUs(100, 2000); 
     std::uniform_int_distribution<int> amountCents(100, 100000);
 
     for (int i = 0; i < numTransactions; ++i) {
