@@ -6,9 +6,13 @@ TESTO = tests/test_logger.o
 MAIN = build/logger
 TEST = test/test_logger
 
+LIBAR = ar rcs
+
 CXXFLAGS = -std=c++11 -Wall -Wextra -g -Wno-unused-parameter -Iinclude
 CXX = g++
 LDFLAGS = -pthread
+
+TARGET = build/liblogger.a
 
 
 

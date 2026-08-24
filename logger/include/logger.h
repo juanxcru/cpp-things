@@ -31,7 +31,12 @@ struct LoggerConfig {
     std::string  baseFilename  = "logger";      // prefix: logger_2024-01-15.log
     std::size_t  maxFileSizeBytes = 10 * 1024 * 1024; // 10 MB before rotation
     LogLevel     minLevel      = LogLevel::DEBUG;   
-    std::size_t  maxQueueSize  = 8192;      
+    std::size_t  maxQueueSize  = 8192;
+    LoggerConfig() = default;
+
+    LoggerConfig(std::string _logDir, std::string _baseFileName) 
+        : logDir(std::move(_logDir)), baseFilename(std::move(_baseFileName)) {}
+
 };
 
 // 

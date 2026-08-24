@@ -1,0 +1,27 @@
+CXX      = g++
+CXXFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Wno-unused-parameter \
+           -Wno-missing-field-initializers -g -Iinclude
+
+LDFLAGS  = -pthread
+
+BUILD    = build
+SRC      = src
+TESTS    = tests
+
+# libs
+LOGGER_DIR = ../logger
+LOGGER_LIB = $(LOGGER_DIR)/build/liblogger.a
+INCLUDES   = -I$(LOGGER_DIR)/include
+
+# src
+COMMON_SRCS = $(SRC)/protocol.cpp \
+              $(SRC)/session_registry.cpp \
+              $(SRC)/client_handler.cpp \
+              $(SRC)/server.cpp
+# objs
+COMMON_OBJS = $(COMMON_SRCS:$(SRC)/%.cpp=$(BUILD)/%.o)
+
+# objs (final)
+SERVER = $(BUILD)/server
+CLIENT = $(BUILD)/client
+TEST   = $(BUILD)/test

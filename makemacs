@@ -1,0 +1,3 @@
+LOGGER_DIR = logger
+SERVER_DIR = server
+CLIENT_DIR = server
